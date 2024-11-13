@@ -9,7 +9,7 @@ import { app } from "./app.js";
 
 // importing approach
 dotenv.config({
-    path:'./env'
+    path:'./.env'
 })
 
 
