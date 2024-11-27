@@ -3,7 +3,7 @@ import { ApiError } from "../utils/apiError.js";
 import { User } from "../models/user.models.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { ApiResponse } from "../utils/Apiresponse.js";
-import { upload } from "../middlewares/multer.middleware.js";
+
 import jwt from "jsonwebtoken"
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 
@@ -269,7 +269,7 @@ const updateUserAvatar = asyncHandler(async(req,res)=>{
 
    }
 //    this.avatar.url = 
-    await User.findByIdAndUpdate(req.user?._id,
+    const user = await User.findByIdAndUpdate(req.user?._id,
         {
             $set:{
                 avatar:avatar.url
@@ -277,6 +277,8 @@ const updateUserAvatar = asyncHandler(async(req,res)=>{
         },
         {new:true}
     ).select("-password")
+
+    return res.status(200).json(new ApiResponse(200,user,"avtar updated"))
 })
 const updateCoverImage = asyncHandler(async(req,res)=>{
     const coverImageLocalpath =  req.file?.path
@@ -290,14 +292,16 @@ const updateCoverImage = asyncHandler(async(req,res)=>{
  
     }
  //    this.avatar.url = 
-     await User.findByIdAndUpdate(req.user?._id,
+    const user =  await User.findByIdAndUpdate(req.user?._id,
          {
              $set:{
                 coverImage:coverImage.url
              }
          },
          {new:true}
-     ).select("-password")
+     ).select("-password") 
+     
+     return res.status(200).json(new ApiResponse(200,user,"cover image uploaded"))
  })
 
 export { registerUser,loginUser,logoutUser,refreshAccessToken,changeCurrentPassword,getCurrentUser,updateAccountDetails,updateUserAvatar };
